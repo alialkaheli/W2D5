@@ -1,3 +1,4 @@
+require_relative "p02_hashing.rb"
 class HashSet
   attr_reader :count
 
@@ -7,12 +8,30 @@ class HashSet
   end
 
   def insert(key)
+    a = key.hash % num_buckets
+    if @count >= num_buckets
+       resize!
+     end 
+    a = key.hash % num_buckets 
+    if !include?(key) 
+      @store[a] << key 
+      @count += 1
+    end 
   end
 
-  def include?(key)
+  def include?(num)
+    a = num.hash % num_buckets
+    return true if @store[a].include?(num)
+    false
   end
 
-  def remove(key)
+  def remove(num)
+    a = num.hash % num_buckets
+    
+    if include?(num) 
+      @store[a].delete(num)
+      @count -= 1
+    end 
   end
 
   private
@@ -26,5 +45,16 @@ class HashSet
   end
 
   def resize!
+    old_array = @store
+    num = 2 * num_buckets
+    @store = Array.new(num) { Array.new }
+    old_array.each do |arr|
+      arr.each do |el|
+        a = el.hash % num
+        @store[a] << el 
+      end 
+    end 
+    @store  
   end
-end
+  end
+
