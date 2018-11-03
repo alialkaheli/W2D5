@@ -98,13 +98,10 @@ class LinkedList
 
   def each
     n = first
-    result = []
-    # debugger
     until n == @tail
       yield n
       n = n.next
     end  
-    # result
   end
 
   # uncomment when you have `each` working and `Enumerable` included
